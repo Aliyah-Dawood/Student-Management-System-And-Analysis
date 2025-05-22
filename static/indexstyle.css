@@ -1,0 +1,116 @@
+/* Base styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Container styling */
+.container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+h2 {
+    font-size: 22px;
+    margin-top: 30px;
+    color: #28a745;
+}
+
+/* Form layout */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* Inputs and selects */
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/* Button styling */
+button {
+    align-self: center;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 16px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 25px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Fieldset and subject entry styling */
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+legend {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+    padding: 0 10px;
+}
+
+/* Subject list display */
+#subjectList {
+    margin-top: 10px;
+}
+
+#subjectList p {
+    margin: 6px 0;
+    padding: 6px 10px;
+    background-color: #e8f5e9;
+    border-left: 5px solid #28a745;
+    border-radius: 4px;
+    font-weight: 500;
+}
