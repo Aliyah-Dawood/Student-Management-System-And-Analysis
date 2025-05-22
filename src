@@ -1,0 +1,5 @@
+mkdir src
+mv app.py config.py templates static src/
+git add src/
+git commit -m "Move application files into src/ directory"
+git push
