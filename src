@@ -1,3 +1,0 @@
-mkdir src
-mv app.py config.py templates static src/
-
