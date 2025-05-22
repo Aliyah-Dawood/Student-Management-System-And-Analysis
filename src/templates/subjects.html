@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subjects</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Subjects Scores</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th><th>Student ID</th><th>Math</th><th>History</th><th>Physics</th><th>Chemistry</th><th>Biology</th><th>English</th><th>Geography</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td>{{ subject.id }}</td>
+                    <td>{{ subject.student_id }}</td>
+                    <td>{{ subject.math_score }}</td>
+                    <td>{{ subject.history_score }}</td>
+                    <td>{{ subject.physics_score }}</td>
+                    <td>{{ subject.chemistry_score }}</td>
+                    <td>{{ subject.biology_score }}</td>
+                    <td>{{ subject.english_score }}</td>
+                    <td>{{ subject.geography_score }}</td>
+                    <td>
+                        <form action="{{ url_for('update_subject', id=subject.id) }}" method="post" style="display:inline;">
+                            <input type="number" step="0.01" name="math_score" placeholder="Math" required>
+                            <input type="number" step="0.01" name="history_score" placeholder="History" required>
+                            <input type="number" step="0.01" name="physics_score" placeholder="Physics" required>
+                            <input type="number" step="0.01" name="chemistry_score" placeholder="Chemistry" required>
+                            <input type="number" step="0.01" name="biology_score" placeholder="Biology" required>
+                            <input type="number" step="0.01" name="english_score" placeholder="English" required>
+                            <input type="number" step="0.01" name="geography_score" placeholder="Geography" required>
+                            <button type="submit">Update</button>
+                        </form>
+                        <a href="{{ url_for('delete_subject', id=subject.id) }}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Add Subject Scores</h2>
+        <form action="{{ url_for('add_subject') }}" method="post">
+            <input type="number" name="student_id" placeholder="Student ID" required>
+            <input type="number" step="0.01" name="math_score" placeholder="Math" required>
+            <input type="number" step="0.01" name="history_score" placeholder="History" required>
+            <input type="number" step="0.01" name="physics_score" placeholder="Physics" required>
+            <input type="number" step="0.01" name="chemistry_score" placeholder="Chemistry" required>
+            <input type="number" step="0.01" name="biology_score" placeholder="Biology" required>
+            <input type="number" step="0.01" name="english_score" placeholder="English" required>
+            <input type="number" step="0.01" name="geography_score" placeholder="Geography" required>
+            <button type="submit">Add Subject Scores</button>
+        </form>
+    </div>
+</body>
+</html>

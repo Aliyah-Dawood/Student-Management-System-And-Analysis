@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Student Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Student Management System</h1>
+        <nav>
+            <a href="{{ url_for('predict') }}">Predict Career</a> |
+            <a href="{{ url_for('student_data') }}">Student Data</a> |
+            <a href="{{ url_for('academic_info') }}">Academic Info</a> |
+            <a href="{{ url_for('subjects') }}">Subjects</a>
+        </nav>
+    </div>
+</body>
+</html>
