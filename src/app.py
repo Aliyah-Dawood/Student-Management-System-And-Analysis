@@ -40,7 +40,7 @@ def predict():
         part_time_job = job_map[request.form['part_time_job']]
         absence_days = int(request.form['absence_days'])
         extracurricular_activities = extra_map[request.form['extracurricular_activities']]
-        self_study_hours = float(request.form['weekly_self_study_hours'])
+        self_study_hours = int(request.form['weekly_self_study_hours'])
 
         # Initialize scores with default 0
         subjects = ['math_score', 'history_score', 'physics_score', 'chemistry_score',
