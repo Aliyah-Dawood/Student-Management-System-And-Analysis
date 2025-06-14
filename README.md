@@ -75,3 +75,4 @@ TROUBLESHOOTING
 - If the port is already in use: run 'python app.py --port 5001'
 - If app isn't loading: make sure you're running from inside the src/ directory
 - Make Sure to enter the Gender field in Student Data page with Capital letter :"Male / Female"
+- Make Sure to enter the part time job & extracurricular activities as "Yes" or "No"
