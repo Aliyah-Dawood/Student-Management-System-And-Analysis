@@ -14,8 +14,8 @@ Student-Management-System/
 ├── src/                        → Source code and assets
 │   ├── static/                 → CSS, JavaScript, etc.
 │   ├── templates/              → HTML templates
-│   ├── Classifier_model3.pkl   → Trained ML classifier and scaler
-|   ├── scaler3.pkl             → Trained ML classifier and scaler
+│   ├── Classifier_model3 (2).pkl   → Trained ML classifier and scaler
+|   ├── scaler3 (2).pkl             → Trained ML classifier and scaler
 │   ├── app.py                  → Main Flask application
 │   ├── config.py               → App configuration
 ├── requirements.txt            → Python dependencies
@@ -51,8 +51,8 @@ GETTING STARTED (SOURCE CODE SETUP)
    pip install -r requirements.txt
 
 4. Ensure ML model files are present in src:
-   - Classifier_model3.pkl
-   - scaler3.pkl
+   - Classifier_model3 (2).pkl
+   - scaler3 (2).pkl
 
 5. Run the Flask app:
    cd src
