@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizations</title>
+</head>
+<body>
+    <h1>Student Performance Visualizations</h1>
+    
+    {% for plot in plots %}
+        <div>
+            <img src="data:image/png;base64,{{ plot }}" style="width:90%; margin-bottom: 40px;" />
+        </div>
+    {% endfor %}
+
+    <a href="/">← Back to Home</a>
+</body>
+</html>
