@@ -138,11 +138,13 @@ def academic_info():
 
 @app.route('/add_academic', methods=['POST'])
 def add_academic():
+    job_map = {'No': 0, 'Yes': 1}
+    extra_map = {'No': 0, 'Yes': 1}
     data = {
         "student_id": request.form['student_id'],
         "absence_days": request.form['absence_days'],
-        "part_time_job": request.form['part_time_job'],
-        "extracurricular_activities": request.form['extracurricular_activities'],
+        "part_time_job": job_map[request.form['part_time_job']],
+        "extracurricular_activities": extra_map[request.form['extracurricular_activities']],
         "weekly_self_study_hours": request.form['weekly_self_study_hours'],
         "career_aspiration": request.form['career_aspiration']
     }
@@ -151,10 +153,12 @@ def add_academic():
 
 @app.route('/update_academic/<int:record_id>', methods=['POST'])
 def update_academic(record_id):
+    job_map = {'No': 0, 'Yes': 1}
+    extra_map = {'No': 0, 'Yes': 1}
     updated_data = {
         "absence_days": request.form['absence_days'],
-        "part_time_job": request.form['part_time_job'],
-        "extracurricular_activities": request.form['extracurricular_activities'],
+        "part_time_job": job_map[request.form['part_time_job']],
+        "extracurricular_activities": extra_map[request.form['extracurricular_activities']],
         "weekly_self_study_hours": request.form['weekly_self_study_hours'],
         "career_aspiration": request.form['career_aspiration']
     }
