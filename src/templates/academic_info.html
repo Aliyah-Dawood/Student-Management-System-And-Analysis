@@ -28,8 +28,8 @@
                     <td>
                         <form action="{{ url_for('update_academic', record_id=academic.record_id) }}" method="post" style="display:inline;">
                             <input type="number" name="absence_days" placeholder="Absence Days" required>
-                            <input type="number" name="part_time_job" placeholder="Part-Time Job" required>
-                            <input type="number" name="extracurricular_activities" placeholder="Extracurricular Activities" required>
+                            <input type="text" name="part_time_job" placeholder="Part-Time Job" required>
+                            <input type="text" name="extracurricular_activities" placeholder="Extracurricular Activities" required>
                             <input type="number" name="weekly_self_study_hours" placeholder="Self Study Hours" required>
                             <input type="text" name="career_aspiration" placeholder="Career Aspiration" required>
                             <button type="submit">Update</button>
@@ -45,8 +45,8 @@
         <form action="{{ url_for('add_academic') }}" method="post">
             <input type="number" name="student_id" placeholder="Student ID" required>
             <input type="number" name="absence_days" placeholder="Absence Days" required>
-            <input type="number" name="part_time_job" placeholder="Part-Time Job" required>
-            <input type="number" name="extracurricular_activities" placeholder="Extracurricular Activities" required>
+            <input type="text" name="part_time_job" placeholder="Part-Time Job" required>
+            <input type="text" name="extracurricular_activities" placeholder="Extracurricular Activities" required>
             <input type="number" name="weekly_self_study_hours" placeholder="Weekly Self Study Hours" required>
             <input type="text" name="career_aspiration" placeholder="Career Aspiration" required>
             <button type="submit">Add Academic Info</button>
