@@ -207,89 +207,115 @@ def delete_subject(id):
 # ----------------- Visualization Page -------------------
 @app.route('/visualizations')
 def visualizations():
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    import io
-    import base64
-    import pandas as pd
-    from config import supabase
+    try:
+        import matplotlib
+        matplotlib.use('Agg')
 
-    images = []  # to store base64 plots
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        import io
+        import base64
+        import pandas as pd
+        from config import supabase
 
-    # -------- Plot 1: Top vs Bottom Performers --------
-    subjects_data = supabase.table("subjects").select("*, student_data(first_name, last_name)").limit(100).execute().data
-    df1 = pd.DataFrame(subjects_data)
-    df1['student_name'] = df1['student_data'].apply(lambda x: f"{x['first_name']} {x['last_name']}")
-    df1['average_score'] = df1[["math_score", "geography_score", "english_score", "physics_score", "chemistry_score", "biology_score"]].mean(axis=1)
-    top_10 = df1.nlargest(10, "average_score").copy().sort_values(by="average_score", ascending=False)
-    bottom_10 = df1.nsmallest(10, "average_score").copy().sort_values(by="average_score", ascending=False)
-    top_10["category"] = "Top 10"
-    bottom_10["category"] = "Bottom 10"
-    df_combined = pd.concat([top_10, bottom_10], ignore_index=True)
-    df_combined["student_name"] = pd.Categorical(df_combined["student_name"], categories=df_combined["student_name"], ordered=True)
-    fig1, ax1 = plt.subplots(figsize=(12, 6))
-    sns.barplot(x="average_score", y="student_name", hue="category", data=df_combined, palette={"Top 10": "green", "Bottom 10": "red"}, ax=ax1)
-    ax1.set_title("Top 10 vs. Bottom 10 Performers")
-    ax1.set_xlabel("Average Score")
-    ax1.set_ylabel("Student Name")
-    ax1.legend(title="Category")
-    ax1.grid(True, linestyle="--", alpha=0.6)
-    buf1 = io.BytesIO()
-    plt.tight_layout()
-    fig1.savefig(buf1, format="png")
-    buf1.seek(0)
-    images.append(base64.b64encode(buf1.read()).decode("utf-8"))
-    plt.close(fig1)
+        images = []
 
-    # -------- Plot 2: Absence vs Performance --------
-    academic_data = supabase.table("academic_info").select("absence_days, student_id").execute().data
-    scores_data = supabase.table("subjects").select("student_id, math_score, geography_score, english_score, physics_score, chemistry_score, biology_score").execute().data
-    df_abs = pd.DataFrame(academic_data)
-    df_scores = pd.DataFrame(scores_data)
-    df2 = pd.merge(df_abs, df_scores, on="student_id")
-    df2["avg_score"] = df2[["math_score", "geography_score", "english_score", "physics_score", "chemistry_score", "biology_score"]].mean(axis=1)
-    fig2, ax2 = plt.subplots(figsize=(8, 5))
-    ax2.scatter(df2['absence_days'], df2['avg_score'], color='b', alpha=0.6)
-    ax2.set_xlabel("Absence Days")
-    ax2.set_ylabel("Average Academic Score")
-    ax2.set_title("Absence Days vs. Academic Performance")
-    ax2.grid(True)
-    buf2 = io.BytesIO()
-    plt.tight_layout()
-    fig2.savefig(buf2, format="png")
-    buf2.seek(0)
-    images.append(base64.b64encode(buf2.read()).decode("utf-8"))
-    plt.close(fig2)
+        # ---------- Plot 1: Top vs Bottom Performers ----------
+        subjects_data = supabase.table("subjects").select("*").limit(100).execute().data
+        students_data = supabase.table("student_data").select("student_id, first_name, last_name").execute().data
 
-    # -------- Plot 3: Career Aspirations --------
-    df3 = pd.DataFrame(supabase.table("academic_info").select("career_aspiration").execute().data)
-    career_counts = df3['career_aspiration'].value_counts()
-    fig3, ax3 = plt.subplots(figsize=(10, 6))
-    sns.barplot(x=career_counts.index, y=career_counts.values, palette="viridis", ax=ax3)
-    ax3.set_xlabel("Career Aspiration")
-    ax3.set_ylabel("Number of Students")
-    ax3.set_title("Career Aspirations Breakdown")
-    ax3.tick_params(axis='x', rotation=60)
-    buf3 = io.BytesIO()
-    plt.tight_layout()
-    fig3.savefig(buf3, format="png")
-    buf3.seek(0)
-    images.append(base64.b64encode(buf3.read()).decode("utf-8"))
-    plt.close(fig3)
+        df1 = pd.DataFrame(subjects_data)
+        students_df = pd.DataFrame(students_data)
 
-    # -------- Plot 4: Subject Score Distribution --------
-    df4 = pd.DataFrame(supabase.table("subjects").select("math_score, geography_score, english_score, physics_score, chemistry_score, biology_score").execute().data)
-    fig4, ax4 = plt.subplots(figsize=(12, 6))
-    sns.boxplot(data=df4, ax=ax4)
-    ax4.set_title("Subjects Score Distribution (Boxplot)")
-    ax4.tick_params(axis='x', rotation=45)
-    buf4 = io.BytesIO()
-    plt.tight_layout()
-    fig4.savefig(buf4, format="png")
-    buf4.seek(0)
-    images.append(base64.b64encode(buf4.read()).decode("utf-8"))
-    plt.close(fig4)
+        df1 = df1.merge(students_df, on='student_id')
+        df1['student_name'] = df1['first_name'] + ' ' + df1['last_name']
+        df1['average_score'] = df1[["math_score", "geography_score", "english_score",
+                                    "physics_score", "chemistry_score", "biology_score"]].mean(axis=1)
 
-    return render_template('visualizations.html', plots=images)
+        top_10 = df1.nlargest(10, "average_score").copy().sort_values(by="average_score", ascending=False)
+        bottom_10 = df1.nsmallest(10, "average_score").copy().sort_values(by="average_score", ascending=False)
+        top_10["category"] = "Top 10"
+        bottom_10["category"] = "Bottom 10"
+
+        df_combined = pd.concat([top_10, bottom_10], ignore_index=True)
+        df_combined["student_name"] = pd.Categorical(df_combined["student_name"],
+                                                     categories=df_combined["student_name"],
+                                                     ordered=True)
+
+        fig1, ax1 = plt.subplots(figsize=(12, 6))
+        sns.barplot(x="average_score", y="student_name", hue="category", data=df_combined,
+                    palette={"Top 10": "green", "Bottom 10": "red"}, ax=ax1)
+        ax1.set_title("Top 10 vs. Bottom 10 Performers")
+        ax1.set_xlabel("Average Score")
+        ax1.set_ylabel("Student Name")
+        ax1.legend(title="Category")
+        ax1.grid(True, linestyle="--", alpha=0.6)
+
+        buf1 = io.BytesIO()
+        plt.tight_layout()
+        fig1.savefig(buf1, format="png")
+        buf1.seek(0)
+        images.append(base64.b64encode(buf1.read()).decode("utf-8"))
+        plt.close(fig1)
+
+        # ---------- Plot 2: Absence vs Performance ----------
+        academic_data = supabase.table("academic_info").select("absence_days, student_id").execute().data
+        scores_data = supabase.table("subjects").select(
+            "student_id, math_score, geography_score, english_score, physics_score, chemistry_score, biology_score"
+        ).execute().data
+
+        df_abs = pd.DataFrame(academic_data)
+        df_scores = pd.DataFrame(scores_data)
+        df2 = pd.merge(df_abs, df_scores, on="student_id")
+        df2["avg_score"] = df2[["math_score", "geography_score", "english_score", "physics_score", "chemistry_score", "biology_score"]].mean(axis=1)
+
+        fig2, ax2 = plt.subplots(figsize=(8, 5))
+        ax2.scatter(df2['absence_days'], df2['avg_score'], color='b', alpha=0.6)
+        ax2.set_xlabel("Absence Days")
+        ax2.set_ylabel("Average Academic Score")
+        ax2.set_title("Absence Days vs. Academic Performance")
+        ax2.grid(True)
+        buf2 = io.BytesIO()
+        plt.tight_layout()
+        fig2.savefig(buf2, format="png")
+        buf2.seek(0)
+        images.append(base64.b64encode(buf2.read()).decode("utf-8"))
+        plt.close(fig2)
+
+        # ---------- Plot 3: Career Aspirations ----------
+        df3 = pd.DataFrame(supabase.table("academic_info").select("career_aspiration").execute().data)
+        career_counts = df3['career_aspiration'].value_counts()
+        fig3, ax3 = plt.subplots(figsize=(10, 6))
+        sns.barplot(x=career_counts.index, y=career_counts.values, palette="viridis", ax=ax3)
+        ax3.set_xlabel("Career Aspiration")
+        ax3.set_ylabel("Number of Students")
+        ax3.set_title("Career Aspirations Breakdown")
+        ax3.tick_params(axis='x', rotation=60)
+        buf3 = io.BytesIO()
+        plt.tight_layout()
+        fig3.savefig(buf3, format="png")
+        buf3.seek(0)
+        images.append(base64.b64encode(buf3.read()).decode("utf-8"))
+        plt.close(fig3)
+
+        # ---------- Plot 4: Subject Score Distribution ----------
+        df4 = pd.DataFrame(supabase.table("subjects").select(
+            "math_score, geography_score, english_score, physics_score, chemistry_score, biology_score"
+        ).execute().data)
+        fig4, ax4 = plt.subplots(figsize=(12, 6))
+        sns.boxplot(data=df4, ax=ax4)
+        ax4.set_title("Subjects Score Distribution (Boxplot)")
+        ax4.tick_params(axis='x', rotation=45)
+        buf4 = io.BytesIO()
+        plt.tight_layout()
+        fig4.savefig(buf4, format="png")
+        buf4.seek(0)
+        images.append(base64.b64encode(buf4.read()).decode("utf-8"))
+        plt.close(fig4)
+
+        return render_template('visualizations.html', plots=images)
+
+    except Exception as e:
+        return f"<h2>Internal Server Error</h2><p>{str(e)}</p>"
 if __name__ == "__main__":
     app.run(debug=True)
